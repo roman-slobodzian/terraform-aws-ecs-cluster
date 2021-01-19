@@ -21,7 +21,7 @@ data "template_file" "cluster_user_data" {
 }
 
 resource "aws_launch_configuration" "cluster" {
-  name_prefix   = "cluster-${var.component}-${var.deployment_identifier}-${var.cluster_name}-"
+  name          = "cluster-${local.cluster_full_name}"
   image_id      = data.template_file.ami_id.rendered
   instance_type = var.cluster_instance_type
   key_name      = var.cluster_instance_ssh_public_key_path == "" ? "" : element(concat(aws_key_pair.cluster.*.key_name, list("")), 0)
@@ -49,7 +49,7 @@ resource "aws_launch_configuration" "cluster" {
 }
 
 resource "aws_autoscaling_group" "cluster" {
-  name_prefix = "asg-${var.component}-${var.deployment_identifier}-${var.cluster_name}-"
+  name = "asg-${local.cluster_full_name}"
 
   vpc_zone_identifier = var.subnet_ids
 
@@ -63,7 +63,7 @@ resource "aws_autoscaling_group" "cluster" {
 
   tag {
     key                 = "Name"
-    value               = "cluster-worker-${var.component}-${var.deployment_identifier}-${var.cluster_name}"
+    value               = "cluster-worker-${local.cluster_full_name}"
     propagate_at_launch = true
   }
 
