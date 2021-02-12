@@ -1,15 +1,9 @@
-data "aws_ami" "amazon_linux_2" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
-  }
+locals {
+  default_ami_id = "ami-0e1f2642e8ed2b983"
 }
 
 data "template_file" "ami_id" {
-  template = coalesce(lookup(var.cluster_instance_amis, var.region), data.aws_ami.amazon_linux_2.image_id)
+  template = coalesce(lookup(var.cluster_instance_amis, var.region), local.default_ami_id)
 }
 
 data "template_file" "cluster_user_data" {
