@@ -15,7 +15,7 @@ data "template_file" "cluster_user_data" {
 }
 
 resource "aws_launch_configuration" "cluster" {
-  name          = "cluster-${local.cluster_full_name}"
+  name          = var.cluster_launch_configuration_name == "" ? "cluster-${local.cluster_full_name}" : var.cluster_launch_configuration_name
   image_id      = data.template_file.ami_id.rendered
   instance_type = var.cluster_instance_type
   key_name      = var.cluster_instance_ssh_public_key_path == "" ? "" : element(concat(aws_key_pair.cluster.*.key_name, list("")), 0)

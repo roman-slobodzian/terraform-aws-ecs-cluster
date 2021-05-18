@@ -54,6 +54,12 @@ variable "cluster_instance_user_data_template" {
   default     = ""
 }
 
+variable "cluster_launch_configuration_name" {
+  description = "Name of cluster launch configuration"
+  type        = string
+  default     = ""
+}
+
 variable "cluster_instance_amis" {
   description = "A map of regions to AMIs for the container instances."
   type        = map(string)
